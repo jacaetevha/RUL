@@ -1,4 +1,5 @@
 require 'active_support'
+require 'uuid'
 require 'rul/rul'
 
 module RUL
