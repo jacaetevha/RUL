@@ -11,7 +11,7 @@ module RUL
     end
 
     def add_with_uuid_info severity, message=nil, progname=nil, &block
-      uuid = (Thread.current[:uuid] ||= @uuid.generate)
+      uuid = (Thread.current[:uuid] ||= @@uuid.generate)
       unless message.include?(uuid)
         message = "#{uuid} - #{message}"
       end
