@@ -15,7 +15,7 @@ module RUL
       unless message.include?(uuid)
         message = "#{uuid} - #{message}"
       end
-      add_without_uuid_information severity, message, progname, &block
+      add_without_uuid_info severity, message, progname, &block
     end
   end
 end
