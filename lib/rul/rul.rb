@@ -1,8 +1,5 @@
-require 'uuid'
-
 module RUL
   module Logging
-    @@uuid = UUID.new
 
     def self.included(base)
       base.class_eval do
@@ -11,7 +8,7 @@ module RUL
     end
 
     def add_with_uuid_info severity, message=nil, progname=nil, &block
-      uuid = (Thread.current[:uuid] ||= @@uuid.generate)
+      uuid = session['session_id']
       unless message.include?(uuid)
         message = "#{uuid} - #{message}"
       end
