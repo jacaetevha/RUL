@@ -2,8 +2,8 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
-  s.name        = "RUL"
-  s.version     = "0.0.5"
+  s.name        = "rul"
+  s.version     = "0.0.9"
   s.authors     = ["Jason Rogers"]
   s.email       = ["jacaetevha@gmail.com"]
   s.homepage    = "https://github.com/jacaetevha/RUL"
