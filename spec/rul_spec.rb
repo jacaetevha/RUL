@@ -32,10 +32,10 @@ describe "RUL" do
     stub_uuid_generator_with OpenStruct.new(:generate => uuid)
     string_io = StringIO.new
     Rails.logger = ActiveSupport::BufferedLogger.new(string_io)
-    Rails.logger.error 'foo'
+    Rails.logger.warn 'foo'
     string_io.rewind
     messages = string_io.read
-    messages.chomp.should == "#{uuid} - foo"
+    messages.chomp.should == "W - #{uuid} - foo"
   end
 
   it "should log a message with a UUID within a controller context" do
@@ -49,6 +49,6 @@ describe "RUL" do
     end
     string_io.rewind
     messages = string_io.read
-    messages.chomp.should == "#{uuid} - foo"
+    messages.chomp.should == "E - #{uuid} - foo"
   end
 end

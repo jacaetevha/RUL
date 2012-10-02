@@ -20,8 +20,18 @@ module RUL
     module InstanceMethods
       def add_with_uuid_info severity, message=nil, progname=nil, &block
         uuid = (Thread.current[uuid_key] ||= self.class.uuid_generator.generate)
-        add_without_uuid_info severity, "#{uuid} - #{message}", progname, &block
-        # add_without_uuid_info severity, "#{Thread.current['session_id']} - #{object_id} - #{message}", progname, &block
+        add_without_uuid_info severity, "#{level_name(severity)} - #{uuid} - #{message.gsub("\n", "")}\n", progname, &block
+      end
+
+      def level_name severity
+        case severity
+        when ActiveSupport::BufferedLogger::Severity::DEBUG; 'D'
+        when ActiveSupport::BufferedLogger::Severity::INFO;  'I'
+        when ActiveSupport::BufferedLogger::Severity::WARN;  'W'
+        when ActiveSupport::BufferedLogger::Severity::ERROR; 'E'
+        when ActiveSupport::BufferedLogger::Severity::FATAL; 'F'
+        else; 'U'
+        end
       end
 
       def uuid_key
@@ -39,12 +49,7 @@ module RUL
 
     module InstanceMethods
       def set_uuid
-        key = if session
-          Thread.current[:session_id] ||= session['session_id']
-          Thread.current[session['session_id']] ||= logger.class.uuid_generator.generate
-        else
-          Thread.current[logger.uuid_key] ||= logger.class.uuid_generator.generate
-        end
+        Thread.current[logger.uuid_key] ||= logger.class.uuid_generator.generate
       end
     end
   end
