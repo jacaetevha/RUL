@@ -1,6 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require 'ostruct'
 
 describe "RUL" do
+  def stub_uuid_generator_with generator
+    ActiveSupport::BufferedLogger.stubs(:uuid_generator).returns(generator)
+  end
+
   before :all do
     RUL::Railtie.initializers.each(&:run)
   end
@@ -23,17 +28,19 @@ describe "RUL" do
   end
 
   it "should log a message with a UUID" do
+    uuid = 'uuid-generator-stub'
+    stub_uuid_generator_with OpenStruct.new(:generate => uuid)
     string_io = StringIO.new
     Rails.logger = ActiveSupport::BufferedLogger.new(string_io)
     Rails.logger.error 'foo'
     string_io.rewind
     messages = string_io.read
-    messages.should_not be_empty
-    messages.should include('foo')
-    puts messages
+    messages.chomp.should == "#{uuid} - foo"
   end
 
   it "should log a message with a UUID within a controller context" do
+    uuid = 'uuid-generator-stub'
+    stub_uuid_generator_with OpenStruct.new(:generate => uuid)
     string_io = StringIO.new
     ActionController::Base.logger = ActiveSupport::BufferedLogger.new(string_io)
     controller = Class.new(ActionController::Base).new
@@ -42,8 +49,6 @@ describe "RUL" do
     end
     string_io.rewind
     messages = string_io.read
-    messages.should_not be_empty
-    messages.should include('foo')
-    puts messages
+    messages.chomp.should == "#{uuid} - foo"
   end
 end

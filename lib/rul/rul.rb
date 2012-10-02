@@ -20,8 +20,8 @@ module RUL
     module InstanceMethods
       def add_with_uuid_info severity, message=nil, progname=nil, &block
         uuid = (Thread.current[uuid_key] ||= self.class.uuid_generator.generate)
-        # add_without_uuid_info severity, "#{uuid} - #{message}", progname, &block
-        add_without_uuid_info severity, "#{Thread.current['session_id']} - #{object_id} - #{message}", progname, &block
+        add_without_uuid_info severity, "#{uuid} - #{message}", progname, &block
+        # add_without_uuid_info severity, "#{Thread.current['session_id']} - #{object_id} - #{message}", progname, &block
       end
 
       def uuid_key

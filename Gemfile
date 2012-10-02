@@ -13,4 +13,5 @@ group :test do
 
   gem 'rails', '=3.0.4'
   gem 'rspec'
+  gem 'mocha'
 end
